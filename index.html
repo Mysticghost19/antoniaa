@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Para Antonia 💖</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #ffe6f0;
+      overflow: hidden;
+    }
+
+    .tela {
+      display: none;
+      height: 100vh;
+      width: 100vw;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .ativa {
+      display: flex;
+    }
+
+    img {
+      max-width: 300px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #ffb6c1;
+    }
+
+    .descricao {
+      font-size: 1.5rem;
+      margin: 20px 0;
+      color: #d63384;
+    }
+
+    .botoes {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 100%;
+      height: 100px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #aceitar {
+      background-color: #ff69b4;
+      color: white;
+      z-index: 2;
+    }
+
+    #recusar {
+      background-color: #ffc0cb;
+      color: #800000;
+      position: absolute;
+      left: 60%;
+      top: 0;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    .terror {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: black;
+      height: 100vh;
+      width: 100vw;
+      z-index: 999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .terror.ativa {
+      display: flex;
+    }
+
+    .terror-texto {
+      font-size: 3em;
+      color: red;
+      animation: piscar 1s infinite;
+    }
+
+    @keyframes piscar {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    .coracoes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .coracao {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: subir 5s linear infinite;
+    }
+
+    .coracao::before,
+    .coracao::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .coracao::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .coracao::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes subir {
+      0% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #ff1493;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TELA 1 -->
+  <div class="tela tela1 ativa">
+    <img src="Gato.jpeg" alt="Foto">
+    <div class="descricao">Pode me mostrar seu rosto?</div>
+    <div class="botoes">
+      <button id="aceitar">Aceitar</button>
+      <button id="recusar">Recusar</button>
+    </div>
+  </div>
+
+  <!-- TELA 2 -->
+  <div class="tela tela2">
+    <h1>Ebaaa! Sabia que você faria a escolha certa! 💖<br>Como forma de agradecimento, vou te dar um presente.</h1>
+    <button id="continuar">Continuar</button>
+  </div>
+
+  <!-- TELA 3 (final) -->
+  <div class="tela tela3">
+    <h1>Toma pra você meu coração ❤️</h1>
+    <div class="coracoes" id="coracoes"></div>
+  </div>
+
+  <!-- TERROR -->
+  <div class="terror" id="terror">
+    <div class="terror-texto">NÃO FAÇA ISSO</div>
+  </div>
+
+  <script>
+    const btnAceitar = document.getElementById("aceitar");
+    const btnRecusar = document.getElementById("recusar");
+    const btnContinuar = document.getElementById("continuar");
+    const tela1 = document.querySelector(".tela1");
+    const tela2 = document.querySelector(".tela2");
+    const tela3 = document.querySelector(".tela3");
+    const terror = document.getElementById("terror");
+
+    btnAceitar.addEventListener("click", () => {
+      tela1.classList.remove("ativa");
+      tela2.classList.add("ativa");
+    });
+
+    btnContinuar.addEventListener("click", () => {
+      tela2.classList.remove("ativa");
+      tela3.classList.add("ativa");
+      iniciarCoracoes();
+    });
+
+    btnRecusar.addEventListener("click", () => {
+      terror.classList.add("ativa");
+      setTimeout(() => {
+        terror.classList.remove("ativa");
+        moverBotao();
+      }, 1500);
+    });
+
+    function moverBotao() {
+      const container = document.querySelector(".botoes");
+      const maxX = container.clientWidth - 100;
+      const maxY = container.clientHeight - 40;
+      const novoX = Math.floor(Math.random() * maxX);
+      const novoY = Math.floor(Math.random() * maxY);
+      btnRecusar.style.left = `${novoX}px`;
+      btnRecusar.style.top = `${novoY}px`;
+    }
+
+    function iniciarCoracoes() {
+      const container = document.getElementById("coracoes");
+      setInterval(() => {
+        const coracao = document.createElement("div");
+        coracao.classList.add("coracao");
+        coracao.style.left = Math.random() * 100 + "vw";
+        container.appendChild(coracao);
+        setTimeout(() => coracao.remove(), 5000);
+      }, 300);
+    }
+  </script>
+</body>
+</html>
